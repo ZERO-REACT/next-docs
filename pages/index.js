@@ -1,209 +1,201 @@
-import Head from 'next/head'
+import React from "react";
+import PropTypes from 'prop-types';
+import {makeStyles} from "@material-ui/core/styles";
+import AppFrame from "../src/modules/components/AppFrame";
+import {useSelector} from "react-redux";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import loadScript from "../src/modules/utils/loadScript";
+import Link from "../src/modules/components/Link";
+import AppFooter from "../src/modules/components/AppFooter";
+import Head from "../src/modules/components/Head";
+import Sponsors, {
+  getInitialProps as getInitialSponsorsProps,
+} from '../src/pages/landing/Sponsors';
 
-export default function Home() {
+let dependenciesLoaded = false;
+
+function loadDependencies() {
+  if (dependenciesLoaded) {
+    return;
+  }
+
+  dependenciesLoaded = true;
+
+  loadScript('https://buttons.github.io/buttons.js', document.querySelector('head'));
+  loadScript('https://platform.twitter.com/widgets.js', document.querySelector('head'));
+}
+
+const useStyles = makeStyles(
+  (theme) => ({
+    root: {
+      flex: '1 0 100%',
+    },
+    hero: {
+      paddingTop: theme.spacing(8),
+      color: theme.palette.primary.main,
+    },
+    content: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'center',
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(8),
+      [theme.breakpoints.up('md')]: {
+        paddingTop: theme.spacing(16),
+        paddingBottom: theme.spacing(16),
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        textAlign: 'left',
+      },
+    },
+    title: {
+      marginLeft: -12,
+      whiteSpace: 'nowrap',
+      letterSpacing: '.7rem',
+      textIndent: '.7rem',
+      fontWeight: theme.typography.fontWeightLight,
+      [theme.breakpoints.only('xs')]: {
+        fontSize: 28,
+      },
+    },
+    logo: {
+      flexShrink: 0,
+      width: 120,
+      height: 120,
+      marginBottom: theme.spacing(2),
+      [theme.breakpoints.up('md')]: {
+        marginRight: theme.spacing(8),
+        width: 195,
+        height: 175,
+      },
+    },
+    button: {
+      marginTop: theme.spacing(4),
+    },
+    social: {
+      padding: theme.spacing(2, 0),
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: 21,
+      boxSizing: 'content-box',
+      '& a': {
+        color: theme.palette.background.paper,
+      },
+    },
+    github: {
+      width: 105,
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginRight: theme.spacing(1),
+      '& span': {
+        display: 'flex',
+      },
+    },
+    twitter: {
+      width: 160,
+      display: 'flex',
+    },
+  }),
+  {name: 'LandingPage'},
+);
+
+const GettingStartedLink = React.forwardRef((props, ref) => {
+  return <Link href="/getting-started/installation" naked ref={ref} {...props} />;
+});
+
+export default function Home(props) {
+  const {sponsorsProps} = props;
+
+  console.log(sponsorsProps);
+
+  React.useEffect(() => {
+    loadDependencies();
+  }, []);
+
+  const t = useSelector((state) => {
+    // console.log(state.options.codeVariant);
+    return state.options.t
+  });
+  // console.log(t);
+  const classes = useStyles();
   return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <AppFrame>
 
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+      <div className={classes.root}>
+        <Head/>
+        <main id="main-content" tabIndex="-1">
+          <div className={classes.hero}>
+            <Container maxWidth="md" className={classes.content}>
+              <img src="/static/logo_raw.svg" alt="" className={classes.logo}/>
+              <div>
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  color="inherit"
+                  gutterBottom
+                  className={classes.title}
+                >
+                  {'MATERIAL-UI'}
+                </Typography>
+                <Typography variant="h5" component="p" color="inherit">
+                  {t('strapline')}
+                </Typography>
+                <Button
+                  component={GettingStartedLink}
+                  className={classes.button}
+                  variant="outlined"
+                  color="primary"
+                >
+                  {t('getStarted')}
+                </Button>
+              </div>
+            </Container>
+          </div>
+          <div className={classes.social}>
+            <div className={classes.github}>
+              <a
+                className="github-button"
+                href="https://github.com/mui-org/material-ui"
+                data-icon="octicon-star"
+                data-show-count="true"
+              >
+                Star
+              </a>
+            </div>
+            <div className={classes.twitter}>
+              <a
+                className="twitter-follow-button"
+                href="https://twitter.com/@materialui"
+                data-show-screen-name="false"
+              >
+                Follow
+              </a>
+            </div>
+          </div>
+          {/*<Pro />*/}
+          {/*<QuickWord />*/}
+          {/*<Steps />*/}
+          {/*<Themes />*/}
+          <Sponsors {...sponsorsProps} />
+          {/*<Quotes />*/}
+          {/*<Users />*/}
+        </main>
+        <AppFooter/>
+      </div>
+    </AppFrame>
   )
 }
+
+Home.propTypes = {
+  sponsorsProps: PropTypes.object.isRequired,
+};
+
+Home.getInitialProps = async () => {
+  return {
+    sponsorsProps: await getInitialSponsorsProps(),
+  };
+};
