@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const pkg = require('../package.json');
 const { findPages } = require('./src/modules/utils/find');
 const { LANGUAGES, LANGUAGES_SSR } = require('./src/modules/constants');
 
@@ -32,7 +31,7 @@ module.exports = {
         'process.env': {
           ENABLE_AD: JSON.stringify(process.env.ENABLE_AD),
           GITHUB_AUTH: JSON.stringify(process.env.GITHUB_AUTH),
-          LIB_VERSION: JSON.stringify(pkg.version),
+          LIB_VERSION: JSON.stringify('0.0.1'),
           REACT_MODE: JSON.stringify(reactMode),
         },
       }),
